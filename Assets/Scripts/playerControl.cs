@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
@@ -9,14 +10,21 @@ public class playerControl : MonoBehaviour
 
     [SerializeField] float speed;
     [SerializeField] float rotSpeed;
-    [SerializeField] private GameObject _bullet1Prefab;
-
+    [SerializeField] GameObject _bullet1Prefab;
     [SerializeField] int bullFrames;
+    [SerializeField] ParticleSystem thrust;
+
     int lastFrames = 0;
+    Bounds bounds;
 
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
+
+        float screenAspect = Camera.main.aspect;
+        float cameraHeight = Camera.main.orthographicSize * 2;
+
+        bounds = new Bounds(Camera.main.transform.position, new Vector3(cameraHeight * screenAspect, cameraHeight, 0));
     }
 
     private void Update()
@@ -31,12 +39,18 @@ public class playerControl : MonoBehaviour
                 shoot();
             }
         }
+
+        // Check if user has warped
+        boundsWarp();
     }
 
     void FixedUpdate()
     {
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Mouse0))
         {
+            var thrustTemp = thrust.emission;
+            thrustTemp.enabled = true;
+
             Vector2 forceDirection = transform.rotation * Vector3.up;
 
             playerRigidbody.AddForce(forceDirection * speed);
@@ -46,13 +60,20 @@ public class playerControl : MonoBehaviour
                 mouseMode = true;
             }
         }
-        
+        else
+        {
+            var thrustTemp = thrust.emission;
+            thrustTemp.enabled = false;
+        }
+
+        /*
         if (Input.GetKey(KeyCode.DownArrow))
         {
             Vector2 forceDirection = transform.rotation * Vector3.down;
 
             playerRigidbody.AddForce(forceDirection * speed);
         }
+        */
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -60,7 +81,7 @@ public class playerControl : MonoBehaviour
 
             mouseMode = false;
         }
-        
+
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             playerRigidbody.MoveRotation(playerRigidbody.rotation + rotSpeed);
@@ -71,6 +92,16 @@ public class playerControl : MonoBehaviour
 
         if (mouseMode) followMouse();
     }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "astroid")
+        {
+            // TODO Explosion here
+            Destroy(gameObject);
+        }
+    }
+
 
     void followMouse()
     {
@@ -85,6 +116,29 @@ public class playerControl : MonoBehaviour
 
     void shoot()
     {
-        Instantiate(_bullet1Prefab, transform.position, transform.rotation, null);
+        GameObject bullet = Instantiate(_bullet1Prefab, transform.position, transform.rotation, null);
+        
+        // Sword?
+        //bullet.transform.SetParent(transform);
+        //bullet.transform.localPosition = new Vector3(0, 5, 0);
+    }
+
+    void boundsWarp()
+    {
+        if (Math.Abs(transform.position.x) > bounds.extents.x)
+        {
+            Vector3 temp = transform.position;
+            temp.x = temp.x * -1;
+
+            transform.position = temp;
+        }
+
+        if (Math.Abs(transform.position.y) > bounds.extents.y)
+        {
+            Vector3 temp = transform.position;
+            temp.y = temp.y * -1;
+
+            transform.position = temp;
+        }
     }
 }
