@@ -6,11 +6,12 @@ public class bulletHandler : MonoBehaviour
 {
 
     float speed;
+    public float damage;
 
     void Start()
     {
         speed = 100.0f;
-
+        damage = 50.0f;
         Destroy(gameObject, 2);
     }
 

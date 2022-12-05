@@ -6,6 +6,7 @@ TagManager:
   tags:
   - astroid
   - bullet
+  - counter
   layers:
   - Default
   - TransparentFX

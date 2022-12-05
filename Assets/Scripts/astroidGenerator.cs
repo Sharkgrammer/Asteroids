@@ -1,11 +1,12 @@
+using TMPro;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
 
 public class astroidGenerator : MonoBehaviour
 {
-
-    [SerializeField] int maxAstroids = 10;
-    [SerializeField] GameObject _astroidPrefab;
+    public int maxAstroids;
+    public GameObject[] _astroidPrefabs;
+    public TextMeshProUGUI killCounter;
 
     public void Update()
     {
@@ -13,8 +14,19 @@ public class astroidGenerator : MonoBehaviour
 
         if (astroids.Length < maxAstroids)
         {
-            Instantiate(_astroidPrefab, transform.position, transform.rotation);
+            GameObject ob = Instantiate(_astroidPrefabs[Random.Range(0, _astroidPrefabs.Length)], transform.position, transform.rotation);
+            ob.GetComponent<astroidHandler>().killCounter = killCounter;
         }
+    }
+
+    public void Start()
+    {
+        InvokeRepeating("updateMaxAstroids", 20.0f, 10.0f);
+    }
+
+    public void updateMaxAstroids()
+    {
+        maxAstroids += 5;
     }
 
 }

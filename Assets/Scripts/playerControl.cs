@@ -95,13 +95,22 @@ public class playerControl : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "astroid")
+        playerCollision(collision.gameObject);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        playerCollision(collision.gameObject);
+    }
+
+    void playerCollision(GameObject collision)
+    {
+        if (collision.tag == "astroid")
         {
             // TODO Explosion here
             Destroy(gameObject);
         }
     }
-
 
     void followMouse()
     {

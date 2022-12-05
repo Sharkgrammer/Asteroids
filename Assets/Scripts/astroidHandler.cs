@@ -1,18 +1,23 @@
 using System;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class astroidHandler : MonoBehaviour
 {
+    public TextMeshProUGUI killCounter;
 
+    //Text text;
     Rigidbody2D rbody;
     Vector2 force;
     Bounds bounds;
     int boundsGap = 8;
-    int health = 3;
+    float health;
 
     void Start()
-    {   
+    {
+       // text = textObj.GetComponent<Text>();
+
         float screenAspect = Camera.main.aspect;
         float cameraHeight = Camera.main.orthographicSize * 2;
 
@@ -24,7 +29,7 @@ public class astroidHandler : MonoBehaviour
 
         rbody.rotation = Random.Range(0.0f, 360.0f);
 
-        health = Random.Range(2, 5);
+        health = Random.Range(80, 150);
 
         generatePoint();
     }
@@ -43,12 +48,19 @@ public class astroidHandler : MonoBehaviour
     {
         if (collision.gameObject.tag == "bullet")
         {
+
+            health -= collision.gameObject.GetComponent<bulletHandler>().damage;
+
             // TODO Explosion here
             if (health <= 0)
             {
+                string[] str = killCounter.text.Split(" ");
+                int counter = int.Parse(str[1]);
+
+                killCounter.text = str[0] + " " + ++counter;
+
                 Destroy(gameObject);
             }
-            health--;
         }
     }
 
@@ -57,16 +69,16 @@ public class astroidHandler : MonoBehaviour
         float x = bounds.extents.x + boundsGap;
         float y = bounds.extents.y + boundsGap;
 
-        Boolean topBounds = Random.Range(0, 1) == 0;
+        Boolean topBounds = Random.Range(0, 2) == 0;
 
         if (topBounds)
         {
-            y *= Random.Range(0, 1) == 0 ? -1 : 1;
+            y *= Random.Range(0, 2) == 0 ? -1 : 1;
             x = Random.Range(-x, x);
         }
         else
         {
-            x *= Random.Range(0, 1) == 0 ? -1 : 1;
+            x *= Random.Range(0, 2) == 0 ? -1 : 1;
             y = Random.Range(-y, y);
         }
 
