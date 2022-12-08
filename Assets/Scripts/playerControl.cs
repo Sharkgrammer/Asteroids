@@ -13,6 +13,7 @@ public class playerControl : MonoBehaviour
     [SerializeField] GameObject _bullet1Prefab;
     [SerializeField] int bullFrames;
     [SerializeField] ParticleSystem thrust;
+    [SerializeField] GameObject _explosionPrefab;
 
     int lastFrames = 0;
     Bounds bounds;
@@ -29,6 +30,8 @@ public class playerControl : MonoBehaviour
 
     private void Update()
     {
+        //if (dead) return; 
+
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse1))
         {
             var tempFrames = Time.frameCount;
@@ -46,6 +49,8 @@ public class playerControl : MonoBehaviour
 
     void FixedUpdate()
     {
+        //if (dead) return;
+
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Mouse0))
         {
             var thrustTemp = thrust.emission;
@@ -107,7 +112,7 @@ public class playerControl : MonoBehaviour
     {
         if (collision.tag == "astroid")
         {
-            // TODO Explosion here
+            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }
