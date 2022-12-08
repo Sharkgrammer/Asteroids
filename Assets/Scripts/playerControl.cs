@@ -7,30 +7,57 @@ public class playerControl : MonoBehaviour
 
     bool mouseMode = false;
     Rigidbody2D playerRigidbody;
-
-    [SerializeField] float speed;
-    [SerializeField] float rotSpeed;
-    [SerializeField] GameObject _bullet1Prefab;
-    [SerializeField] int bullFrames;
-    [SerializeField] ParticleSystem thrust;
-    [SerializeField] GameObject _explosionPrefab;
-
     int lastFrames = 0;
+    int bullFrames = 120;
     Bounds bounds;
+
+    [SerializeField] GameObject _bullet1Prefab;
+    [SerializeField] GameObject _explosionPrefab;
+    [SerializeField] ParticleSystem thrust;
+    [SerializeField] AudioSource thrustAudio;
+    [SerializeField] AudioSource bulletAudio;
+
+    [SerializeField] float speed = 70;
+    [SerializeField] float rotSpeed = 3;
+    [SerializeField] float rateOfFire = 1;
+    [SerializeField] float rateOfRotation = 1;
+    [SerializeField] float rateOfSpeed = 1;
+
 
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
-
         float screenAspect = Camera.main.aspect;
         float cameraHeight = Camera.main.orthographicSize * 2;
 
         bounds = new Bounds(Camera.main.transform.position, new Vector3(cameraHeight * screenAspect, cameraHeight, 0));
+
+        bullFrames = (int) Math.Round(bullFrames * rateOfFire);
     }
 
     private void Update()
     {
         //if (dead) return; 
+
+        /*
+        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse1))
+        {
+            var tempFrames = Time.frameCount;
+
+            if (lastFrames + bullFrames < tempFrames)
+            {
+                lastFrames = tempFrames;
+                shoot();
+            }
+        }*/
+
+        // Check if user has warped
+        boundsWarp();
+    }
+
+    void FixedUpdate()
+    {
+        //if (dead) return;
 
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse1))
         {
@@ -43,22 +70,19 @@ public class playerControl : MonoBehaviour
             }
         }
 
-        // Check if user has warped
-        boundsWarp();
-    }
-
-    void FixedUpdate()
-    {
-        //if (dead) return;
-
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Mouse0))
         {
             var thrustTemp = thrust.emission;
             thrustTemp.enabled = true;
+            
+            if (!thrustAudio.isPlaying)
+            {
+                thrustAudio.Play();
+            }
 
             Vector2 forceDirection = transform.rotation * Vector3.up;
 
-            playerRigidbody.AddForce(forceDirection * speed);
+            playerRigidbody.AddForce(forceDirection * (speed * rateOfSpeed));
 
             if (Input.GetKey(KeyCode.Mouse0))
             {
@@ -82,14 +106,14 @@ public class playerControl : MonoBehaviour
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            playerRigidbody.MoveRotation(playerRigidbody.rotation - rotSpeed);
+            playerRigidbody.MoveRotation(playerRigidbody.rotation - (rotSpeed * rateOfRotation));
 
             mouseMode = false;
         }
 
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            playerRigidbody.MoveRotation(playerRigidbody.rotation + rotSpeed);
+            playerRigidbody.MoveRotation(playerRigidbody.rotation + (rotSpeed * rateOfRotation));
 
             mouseMode = false;
         }
@@ -131,7 +155,11 @@ public class playerControl : MonoBehaviour
     void shoot()
     {
         GameObject bullet = Instantiate(_bullet1Prefab, transform.position, transform.rotation, null);
-        
+
+        //if (!bulletAudio.isPlaying)
+       // {
+            bulletAudio.Play();
+        //}
         // Sword?
         //bullet.transform.SetParent(transform);
         //bullet.transform.localPosition = new Vector3(0, 5, 0);

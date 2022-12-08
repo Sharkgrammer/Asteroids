@@ -60,6 +60,7 @@
     <Compile Include="Assets\Scripts\astroidHandler.cs" />
     <Compile Include="Assets\Scripts\playerControl.cs" />
     <Compile Include="Assets\Scripts\astroidGenerator.cs" />
+    <Compile Include="Assets\Scripts\explosionPlayerHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

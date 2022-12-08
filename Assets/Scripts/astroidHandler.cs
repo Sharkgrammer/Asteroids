@@ -7,7 +7,6 @@ public class astroidHandler : MonoBehaviour
 {
     public TextMeshProUGUI killCounter;
 
-    //Text text;
     Rigidbody2D rbody;
     Vector2 force;
     Bounds bounds;
@@ -16,12 +15,12 @@ public class astroidHandler : MonoBehaviour
 
     void Start()
     {
-       // text = textObj.GetComponent<Text>();
-
         float screenAspect = Camera.main.aspect;
         float cameraHeight = Camera.main.orthographicSize * 2;
 
         bounds = new Bounds(Camera.main.transform.position, new Vector3(cameraHeight * screenAspect, cameraHeight, 0));
+
+        generatePoint();
 
         rbody = GetComponent<Rigidbody2D>();
 
@@ -31,7 +30,8 @@ public class astroidHandler : MonoBehaviour
 
         health = Random.Range(80, 150);
 
-        generatePoint();
+        int scale = Random.Range(15, 25);
+        transform.localScale = new Vector3(scale, scale, scale);
     }
 
     private void Update()
@@ -41,7 +41,7 @@ public class astroidHandler : MonoBehaviour
 
     void FixedUpdate()
     {
-        rbody.AddForce(force);
+        rbody.MovePosition(rbody.position + force);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -89,18 +89,25 @@ public class astroidHandler : MonoBehaviour
     {
         if (Math.Abs(transform.position.x) - boundsGap > bounds.extents.x)
         {
-            Vector3 temp = transform.position;
-            temp.x = temp.x * -1;
+            Vector2 temp = rbody.position;
+            temp.x *= -1;
+            //force.x *= -1;
 
-            transform.position = temp;
+            rbody.position = temp;
         }
 
         if (Math.Abs(transform.position.y) - boundsGap > bounds.extents.y)
         {
-            Vector3 temp = transform.position;
-            temp.y = temp.y * -1;
+            Vector2 temp = rbody.position;
+            temp.y *= -1;
+            //force.y *= -1;
 
-            transform.position = temp;
+            rbody.position = temp;
         }
+    }
+
+    Boolean withinRange()
+    {
+        return false;
     }
 }

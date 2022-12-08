@@ -14,7 +14,7 @@ public class astroidGenerator : MonoBehaviour
 
         if (astroids.Length < maxAstroids)
         {
-            GameObject ob = Instantiate(_astroidPrefabs[Random.Range(0, _astroidPrefabs.Length)], transform.position, transform.rotation);
+            GameObject ob = Instantiate(_astroidPrefabs[Random.Range(0, _astroidPrefabs.Length)], transform.position, Quaternion.identity);
             ob.GetComponent<astroidHandler>().killCounter = killCounter;
         }
     }
