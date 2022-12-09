@@ -4,12 +4,12 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class playerControl : MonoBehaviour
 {
-
-    bool mouseMode = false;
-    Rigidbody2D playerRigidbody;
-    float lastTime = 0;
-    float bulletTime = 0.3f;
-    Bounds bounds;
+    private bool mouseMode = false;
+    private bool dead = false;
+    private Rigidbody2D playerRigidbody;
+    private float lastTime = 0;
+    private float bulletTime = 0.3f;
+    private Bounds bounds;
 
     [SerializeField] GameObject _bullet1Prefab;
     [SerializeField] GameObject _explosionPrefab;
@@ -37,7 +37,7 @@ public class playerControl : MonoBehaviour
 
     private void Update()
     {
-        //if (dead) return; 
+        if (dead) return;
 
         /*
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse1))
@@ -57,7 +57,7 @@ public class playerControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        //if (dead) return;
+        if (dead) return;
 
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse1))
         {
@@ -74,7 +74,7 @@ public class playerControl : MonoBehaviour
         {
             var thrustTemp = thrust.emission;
             thrustTemp.enabled = true;
-            
+
             if (!thrustAudio.isPlaying)
             {
                 thrustAudio.Play();
@@ -134,8 +134,9 @@ public class playerControl : MonoBehaviour
 
     void playerCollision(GameObject collision)
     {
-        if (collision.tag == "astroid")
+        if (collision.tag == "asteroid")
         {
+            this.dead = true;
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
@@ -145,7 +146,7 @@ public class playerControl : MonoBehaviour
     {
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = mousePosition - playerRigidbody.position;
-        
+
         float angle = Vector2.SignedAngle(Vector2.right, direction);
         Vector3 targetRotation = new Vector3(0, 0, angle - 90);
 
@@ -157,8 +158,8 @@ public class playerControl : MonoBehaviour
         GameObject bullet = Instantiate(_bullet1Prefab, transform.position, transform.rotation, null);
 
         //if (!bulletAudio.isPlaying)
-       // {
-            bulletAudio.Play();
+        // {
+        bulletAudio.Play();
         //}
         // Sword?
         //bullet.transform.SetParent(transform);
@@ -182,5 +183,10 @@ public class playerControl : MonoBehaviour
 
             transform.position = temp;
         }
+    }
+
+    public bool isDead()
+    {
+        return this.dead;
     }
 }

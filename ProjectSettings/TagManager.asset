@@ -4,9 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - astroid
   - bullet
   - counter
+  - asteroid
   layers:
   - Default
   - TransparentFX

@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class astroidHandler : MonoBehaviour
+public class asteroidHandler : MonoBehaviour
 {
     public TextMeshProUGUI killCounter;
 
@@ -12,6 +12,8 @@ public class astroidHandler : MonoBehaviour
     Bounds bounds;
     int boundsGap = 8;
     float health;
+    private bool pause = false;
+    private bool gameover = false;
 
     void Start()
     {
@@ -36,11 +38,61 @@ public class astroidHandler : MonoBehaviour
 
     private void Update()
     {
+        if (this.pause || this.gameover) return;
+
         boundsWarp();
     }
 
     void FixedUpdate()
     {
+        if (this.pause) return;
+
+        if (this.gameover)
+        {
+            // If the asteroids just stop it looks jarring
+            // Force them to decelerate a small bit instead
+            float x = force.x;
+            float y = force.y;
+            float dec = 0.01f;
+
+            if (x == 0 && y == 0)
+            {
+                return;
+            }
+
+            if (x != 0)
+            {
+                if (Math.Abs(x) < dec)
+                {
+                    force.x = 0;
+                }
+                else if (x > 0)
+                {
+                    force.x -= dec;
+                }
+                else if (x < 0)
+                {
+                    force.x += dec;
+                }
+            }
+
+            if (y != 0)
+            {
+                if (Math.Abs(y) < dec)
+                {
+                    force.y = 0;
+                }
+                else if (y > 0)
+                {
+                    force.y -= dec;
+                }
+                else if (y < 0)
+                {
+                    force.y += dec;
+                }
+            }
+        }
+
         rbody.MovePosition(rbody.position + force);
     }
 
@@ -106,8 +158,13 @@ public class astroidHandler : MonoBehaviour
         }
     }
 
-    Boolean withinRange()
+    public void pauseObj()
     {
-        return false;
+        this.pause = true;
+    }
+
+    public void playerDead()
+    {
+        this.gameover = true;
     }
 }

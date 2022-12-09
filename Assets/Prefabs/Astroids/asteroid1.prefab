@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: -2391936184419685400}
   - component: {fileID: 8865559876666930990}
   m_Layer: 0
-  m_Name: astroid2
-  m_TagString: astroid
+  m_Name: asteroid1
+  m_TagString: asteroid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3286163911610860551, guid: da2f567cf9dae964e808c883a07ad6bd, type: 3}
+  m_Sprite: {fileID: 3286163911610860551, guid: 71a95fa685fb8344eb29c47ac5231762, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c7bdbd77b6b13499ce4a2e2f59f448, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  killCounter: {fileID: 0}
 --- !u!50 &-2391936184419685400
 Rigidbody2D:
   serializedVersion: 4
@@ -145,19 +146,18 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.16326968, y: 0.11149013}
-      - {x: 0.10645288, y: 0.18972763}
-      - {x: 0.03993386, y: 0.24666294}
-      - {x: -0.060996473, y: 0.27001217}
-      - {x: -0.12443397, y: 0.2400212}
-      - {x: -0.17366861, y: 0.16418035}
-      - {x: -0.19198571, y: 0.1048979}
-      - {x: -0.1627337, y: 0.0012930296}
-      - {x: -0.15487859, y: -0.10111442}
-      - {x: -0.16382867, y: -0.21830921}
-      - {x: -0.06115938, y: -0.2743415}
-      - {x: -0.004930079, y: -0.2745661}
-      - {x: 0.085195854, y: -0.25531995}
+    - - {x: 0.3394817, y: 0.26398134}
+      - {x: 0.25894406, y: 0.3489962}
+      - {x: 0.13481729, y: 0.39237672}
+      - {x: 0, y: 0.40555984}
+      - {x: -0.22609477, y: 0.24679863}
+      - {x: -0.26177463, y: 0.16418035}
+      - {x: -0.354643, y: 0.09812052}
+      - {x: -0.36944395, y: -0.015650436}
+      - {x: -0.18416081, y: -0.2793057}
+      - {x: -0.07471415, y: -0.35228145}
+      - {x: -0.004930079, y: -0.3931704}
+      - {x: 0.10213931, y: -0.33664858}
       - {x: 0.1516281, y: -0.14917459}
-      - {x: 0.19268027, y: -0.05978386}
-      - {x: 0.06039465, y: 0.0067206696}
+      - {x: 0.29434106, y: -0.015730843}
+      - {x: 0.35859963, y: 0.12532493}

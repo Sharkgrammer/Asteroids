@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: -2391936184419685400}
   - component: {fileID: 8865559876666930990}
   m_Layer: 0
-  m_Name: astroid3
-  m_TagString: astroid
+  m_Name: asteroid3
+  m_TagString: asteroid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c7bdbd77b6b13499ce4a2e2f59f448, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  killCounter: {fileID: 0}
 --- !u!50 &-2391936184419685400
 Rigidbody2D:
   serializedVersion: 4

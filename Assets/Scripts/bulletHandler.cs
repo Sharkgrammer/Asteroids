@@ -22,7 +22,7 @@ public class bulletHandler : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "astroid")
+        if (collision.gameObject.tag == "asteroid")
         {
             // TODO Explosion here
             Destroy(gameObject);
