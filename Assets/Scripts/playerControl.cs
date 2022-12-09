@@ -7,8 +7,8 @@ public class playerControl : MonoBehaviour
 
     bool mouseMode = false;
     Rigidbody2D playerRigidbody;
-    int lastFrames = 0;
-    int bullFrames = 120;
+    float lastTime = 0;
+    float bulletTime = 0.3f;
     Bounds bounds;
 
     [SerializeField] GameObject _bullet1Prefab;
@@ -32,7 +32,7 @@ public class playerControl : MonoBehaviour
 
         bounds = new Bounds(Camera.main.transform.position, new Vector3(cameraHeight * screenAspect, cameraHeight, 0));
 
-        bullFrames = (int) Math.Round(bullFrames * rateOfFire);
+        bulletTime = bulletTime * rateOfFire;
     }
 
     private void Update()
@@ -61,11 +61,11 @@ public class playerControl : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse1))
         {
-            var tempFrames = Time.frameCount;
+            var tempFrames = Time.time;
 
-            if (lastFrames + bullFrames < tempFrames)
+            if (lastTime + bulletTime < tempFrames)
             {
-                lastFrames = tempFrames;
+                lastTime = tempFrames;
                 shoot();
             }
         }
