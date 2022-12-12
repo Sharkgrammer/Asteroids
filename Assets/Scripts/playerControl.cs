@@ -1,6 +1,7 @@
+using Assets.Scripts.Weapons;
+using Assets.Scripts.Powerups;
 using System;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class playerControl : MonoBehaviour
 {
@@ -9,47 +10,46 @@ public class playerControl : MonoBehaviour
     private Rigidbody2D playerRigidbody;
     private float lastTime = 0;
     private float bulletTime = 0.3f;
+    private float scale = 0.8f;
     private Bounds bounds;
 
-    [SerializeField] GameObject _bullet1Prefab;
+    internal static Weapon Weapon { get => weapon; set => weapon = value; }
+    private static Weapon weapon;
+
+    private Powerup powerup;
+
     [SerializeField] GameObject _explosionPrefab;
     [SerializeField] ParticleSystem thrust;
     [SerializeField] AudioSource thrustAudio;
-    [SerializeField] AudioSource bulletAudio;
 
     [SerializeField] float speed = 70;
     [SerializeField] float rotSpeed = 3;
+
     [SerializeField] float rateOfFire = 1;
     [SerializeField] float rateOfRotation = 1;
     [SerializeField] float rateOfSpeed = 1;
+    [SerializeField] float rateOfScale = 1;
 
 
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
+
         float screenAspect = Camera.main.aspect;
         float cameraHeight = Camera.main.orthographicSize * 2;
-
         bounds = new Bounds(Camera.main.transform.position, new Vector3(cameraHeight * screenAspect, cameraHeight, 0));
 
-        bulletTime = bulletTime * rateOfFire;
+        setScale();
+        setBulletSpeed();
+
+        // Set default weapon / powerup
+        weapon = new Pew();
+        powerup = new NoPowerup();
     }
 
     private void Update()
     {
         if (dead) return;
-
-        /*
-        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse1))
-        {
-            var tempFrames = Time.frameCount;
-
-            if (lastFrames + bullFrames < tempFrames)
-            {
-                lastFrames = tempFrames;
-                shoot();
-            }
-        }*/
 
         // Check if user has warped
         boundsWarp();
@@ -155,16 +155,8 @@ public class playerControl : MonoBehaviour
 
     void shoot()
     {
-        GameObject bullet = Instantiate(_bullet1Prefab, transform.position, transform.rotation, null);
-
-        //if (!bulletAudio.isPlaying)
-        // {
-        bulletAudio.Play();
-        //}
-        // Sword?
-        //bullet.transform.SetParent(transform);
-        //bullet.transform.localPosition = new Vector3(0, 5, 0);
-    }
+        Weapon.shoot(transform);
+     }
 
     void boundsWarp()
     {
@@ -188,5 +180,16 @@ public class playerControl : MonoBehaviour
     public bool isDead()
     {
         return this.dead;
+    }
+
+    public void setScale()
+    {
+        float tempScale = scale * rateOfScale;
+        transform.localScale = new Vector3(tempScale, tempScale, tempScale);
+    }
+
+    public void setBulletSpeed()
+    {
+        bulletTime = bulletTime * rateOfFire;
     }
 }

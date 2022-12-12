@@ -101,7 +101,7 @@ public class asteroidHandler : MonoBehaviour
         if (collision.gameObject.tag == "bullet")
         {
 
-            health -= collision.gameObject.GetComponent<bulletHandler>().damage;
+            health -= playerControl.Weapon.getDamage();
 
             // TODO Explosion here
             if (health <= 0)

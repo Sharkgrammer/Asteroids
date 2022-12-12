@@ -1,3 +1,4 @@
+using Assets.Scripts.Weapons;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,27 +6,69 @@ using UnityEngine;
 public class bulletHandler : MonoBehaviour
 {
 
-    float speed;
-    public float damage;
+    private Weapon weapon;
+
+    public void setBulletData(Weapon weapon)
+    {
+        this.weapon = weapon;
+    }
 
     void Start()
     {
-        speed = 100.0f;
-        damage = 50.0f;
-        Destroy(gameObject, 2);
+        Destroy(gameObject, weapon.getLifetime());
     }
 
     void Update()
     {
-        transform.Translate(Vector3.up * speed * Time.deltaTime);
+        Vector3 direction = Vector3.up;
+        int modifier = 0;
+
+        if (weapon.getName() == "Sword")
+        {
+            // Code for Sword. The sword should retract itself if the player isn't shooting
+            if (!(Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse1)))
+            {
+                direction = Vector3.down;
+
+                if (transform.localPosition.y <= 0)
+                {
+                    direction = new Vector3(0, 0, 0);
+                }
+                else
+                {
+                    modifier = 10;
+                }
+            }
+        }
+
+        transform.Translate(direction * (weapon.getSpeed() + modifier) * Time.deltaTime);
+    }
+
+    void FixedUpdate()
+    {
+        if (weapon.getName() == "Pew")
+        {
+            float scale = transform.localScale.x;
+
+            scale += 0.2f;
+
+            transform.localScale = new Vector3(scale, scale, scale);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "asteroid")
         {
-            // TODO Explosion here
-            Destroy(gameObject);
+            if (!GetComponent<AudioSource>().isPlaying)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                GetComponent<SpriteRenderer>().enabled = false;
+                GetComponent<Collider2D>().enabled = false;
+            }
         }
     }
 }

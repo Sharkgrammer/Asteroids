@@ -56,7 +56,17 @@ public class generator : MonoBehaviour
             TextMeshProUGUI[] deathTexts = deathScreen.GetComponentsInChildren<TextMeshProUGUI>();
 
             deathTexts[1].text += score;
-            deathTexts[2].text += Math.Round(Time.time, 2) + " Seconds";
+
+            float time = Time.timeSinceLevelLoad;
+            String timeText = "seconds";
+
+            if (time >= 60)
+            {
+                timeText = "minutes";
+                time /= 60;
+            }
+
+            deathTexts[2].text += Math.Round(time, 2) + " " + timeText;
 
             deathScreen.SetActive(true);
 
