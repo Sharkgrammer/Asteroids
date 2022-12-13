@@ -15,7 +15,7 @@ namespace Assets.Scripts.Weapons
 
             this.lifetime = 2;
             this.speed = 16;
-            this.damage = 20;
+            this.damage = 25;
 
             swordPieces = new List<GameObject>();
         }

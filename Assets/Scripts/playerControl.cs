@@ -21,6 +21,7 @@ public class playerControl : MonoBehaviour
     [SerializeField] GameObject _explosionPrefab;
     [SerializeField] ParticleSystem thrust;
     [SerializeField] AudioSource thrustAudio;
+    [SerializeField] AudioSource pickupAudio;
 
     [SerializeField] float speed = 70;
     [SerializeField] float rotSpeed = 3;
@@ -43,7 +44,7 @@ public class playerControl : MonoBehaviour
         setBulletSpeed();
 
         // Set default weapon / powerup
-        weapon = new Pew();
+        weapon = new SingleShot();
         powerup = new NoPowerup();
     }
 
@@ -139,6 +140,29 @@ public class playerControl : MonoBehaviour
             this.dead = true;
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
+        }
+        else if (collision.tag == "pickup")
+        {
+            pickupHandler pickup = collision.GetComponent<pickupHandler>();
+
+            if (pickup.isWeapon)
+            {
+                switch (pickup.pickupName)
+                {
+                    case "SingleShot":
+                        weapon = new SingleShot();
+                        break;
+                    case "Sword":
+                        weapon = new Sword();
+                        break;
+                    case "TriShot":
+                        weapon = new TriShot();
+                        break;
+                }
+            }
+
+            pickupAudio.Play();
+            Destroy(collision);
         }
     }
 

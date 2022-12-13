@@ -2,7 +2,6 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Windows;
 using Input = UnityEngine.Input;
 using Random = UnityEngine.Random;
 
@@ -13,15 +12,18 @@ public class generator : MonoBehaviour
     [SerializeField] GameObject deathScreen;
     [SerializeField] GameObject[] _asteroidPrefabs;
     [SerializeField] GameObject player;
+    [SerializeField] GameObject pickup;
 
     private bool playerDead = false;
     private bool allowReset = false;
+    int weaponidtemp = 0;
 
     public void Start()
     {
         deathScreen.SetActive(false);
 
         InvokeRepeating("updateMaxAsteroid", 20.0f, 10.0f);
+        InvokeRepeating("generateRandomPickup", 10.0f, 20.0f);
     }
 
 
@@ -91,4 +93,10 @@ public class generator : MonoBehaviour
         allowReset = true;
     }
 
+    public void generateRandomPickup()
+    {
+        GameObject obj = Instantiate(this.pickup, transform.position, Quaternion.identity);
+
+        obj.GetComponent<pickupHandler>().weaponidxx = ++weaponidtemp;
+    }
 }
