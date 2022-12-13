@@ -11,8 +11,6 @@ public class pickupHandler : MonoBehaviour
     public Boolean isWeapon = true;
     public String pickupName;
 
-    public int weaponidxx = 0;
-
     [SerializeField] GameObject[] weaponObjects;
     [SerializeField] GameObject[] powerups;
 
@@ -34,8 +32,7 @@ public class pickupHandler : MonoBehaviour
             weaponID = Random.Range(0, weaponObjects.Length);
         }
 
-        weaponID = weaponidxx;
-        anim.runtimeAnimatorController = weaponObjects[weaponidxx].GetComponent<Animator>().runtimeAnimatorController;
+        anim.runtimeAnimatorController = weaponObjects[weaponID].GetComponent<Animator>().runtimeAnimatorController;
         anim.enabled = true;
 
         pickupName = weaponObjects[weaponID].name;

@@ -16,7 +16,6 @@ public class generator : MonoBehaviour
 
     private bool playerDead = false;
     private bool allowReset = false;
-    int weaponidtemp = 0;
 
     public void Start()
     {
@@ -95,8 +94,6 @@ public class generator : MonoBehaviour
 
     public void generateRandomPickup()
     {
-        GameObject obj = Instantiate(this.pickup, transform.position, Quaternion.identity);
-
-        obj.GetComponent<pickupHandler>().weaponidxx = ++weaponidtemp;
+       Instantiate(this.pickup, transform.position, Quaternion.identity);
     }
 }
