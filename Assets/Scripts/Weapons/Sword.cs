@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Transform = UnityEngine.Transform;
 
 namespace Assets.Scripts.Weapons
@@ -7,17 +6,16 @@ namespace Assets.Scripts.Weapons
     internal class Sword : Weapon
     {
 
-        List<GameObject> swordPieces;
-
         public Sword()
         {
             this.setBullet("Sword");
 
             this.lifetime = 2;
-            this.speed = 16;
-            this.damage = 25;
+            this.speed = 15;
+            this.damage = 12;
 
-            swordPieces = new List<GameObject>();
+            this.rorAdj = 0.25f;
+            this.rofAdj = 0.7f;
         }
 
         public override void shoot(Transform transform)
@@ -30,11 +28,6 @@ namespace Assets.Scripts.Weapons
             bullet.transform.localPosition = new Vector3(0, 0, 0);
 
             bullet.GetComponent<AudioSource>().Play();
-
-            swordPieces.Add(bullet);
-            swordPieces.RemoveAll(b => b == null);
-
-            
         }
 
     }

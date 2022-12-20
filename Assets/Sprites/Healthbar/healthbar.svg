@@ -9,15 +9,18 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="23.941456mm"
-   height="31.992485mm"
-   viewBox="0 0 23.941456 31.992485"
+   width="100mm"
+   height="25mm"
+   viewBox="0 0 100 25"
    version="1.1"
-   id="svg8"
+   id="svg1411"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="sword.svg">
+   sodipodi:docname="healthbar.svg"
+   inkscape:export-filename="C:\Users\Admin\Documents\Unity\Great White Shark\Assets\Sprites\Astroid\healthbar.png"
+   inkscape:export-xdpi="554.57098"
+   inkscape:export-ydpi="554.57098">
   <defs
-     id="defs2" />
+     id="defs1405" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -25,31 +28,30 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="-62.108448"
-     inkscape:cy="-36.801234"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="-476.54859"
+     inkscape:cy="115.09413"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     showguides="false" />
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
   <metadata
-     id="metadata5">
+     id="metadata1408">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -57,12 +59,13 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-5.1224803,-3.5480151)">
-    <path
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.2180928;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 5.1224803,19.462974 V 35.5405 L 17.227331,19.62554 29.063937,35.5405 V 19.462974 L 17.064551,3.5480151 Z"
-       id="rect815"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccc" />
+     transform="translate(-52.916664,-105.69048)">
+    <rect
+       style="opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.9024176;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect1956"
+       width="100"
+       height="25"
+       x="52.916664"
+       y="105.69048" />
   </g>
 </svg>

@@ -10,6 +10,10 @@ namespace Assets.Scripts.Weapons
         protected float damage = 50.0f;
         protected int lifetime = 2;
         protected string name;
+        protected float rofAdj = 0;
+        protected float rorAdj = 0;
+        protected float rosAdj = 0;
+        protected float scaleAdj = 0;
 
         public float weaponModifer = 1;
 
@@ -37,6 +41,25 @@ namespace Assets.Scripts.Weapons
         public string getName()
         {
             return name;
+        }
+
+        public float getRateOfSpeedAdj()
+        {
+            return rosAdj;
+        }
+        public float getRateOfRotationAdj()
+        {
+            return rorAdj;
+        }
+
+        public float getRateOfFireAdj()
+        {
+            return rofAdj;
+        }
+
+        public float getScaleAdj()
+        {
+            return scaleAdj;
         }
 
         public abstract void shoot(Transform transform);

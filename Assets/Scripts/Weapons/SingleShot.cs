@@ -10,15 +10,16 @@ namespace Assets.Scripts.Weapons
             this.setBullet("SingleShot");
 
             this.lifetime = 2;
-            this.speed = 100;
+            this.speed = 120;
             this.damage = 50;
+
+            this.rofAdj = 0.2f;
+            this.scaleAdj = 3.0f;
         }
 
         public override void shoot(Transform transform)
         {
             GameObject bullet = GameObject.Instantiate(this.bullet, transform.position, transform.rotation, null);
-
-            //float s = this.speed + (this.speed - (this.speed * this.weaponModifer));
 
             bullet.GetComponent<bulletHandler>().setBulletData(this);
 

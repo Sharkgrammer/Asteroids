@@ -13,8 +13,20 @@ public class bulletHandler : MonoBehaviour
         this.weapon = weapon;
     }
 
+    void scaleBullet()
+    {
+        if (weapon.getScaleAdj() != 0)
+        {
+            float scale = transform.localScale.x + weapon.getScaleAdj();
+
+            transform.localScale = new Vector3(scale, scale, scale);
+        }
+    }
+
     void Start()
     {
+        scaleBullet();
+
         Destroy(gameObject, weapon.getLifetime());
     }
 
@@ -36,7 +48,7 @@ public class bulletHandler : MonoBehaviour
                 }
                 else
                 {
-                    modifier = 10;
+                    modifier = 25;
                 }
             }
         }

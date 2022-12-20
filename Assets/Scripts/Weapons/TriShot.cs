@@ -10,13 +10,13 @@ namespace Assets.Scripts.Weapons
 
         public TriShot()
         {
-            this.setBullet("SingleShot");
+            this.setBullet("TriShot");
 
             this.lifetime = 2;
-            this.speed = 70;
+            this.speed = 90;
             this.damage = 20;
 
-            this.angle = 30;
+            this.angle = 20;
         }
 
         public override void shoot(Transform transform)

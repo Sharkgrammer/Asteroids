@@ -9,7 +9,7 @@ public class playerControl : MonoBehaviour
     private bool dead = false;
     private Rigidbody2D playerRigidbody;
     private float lastTime = 0;
-    private float bulletTime = 0.3f;
+    private float bulletTime = 0.5f;
     private float scale = 0.8f;
     private Bounds bounds;
 
@@ -41,7 +41,6 @@ public class playerControl : MonoBehaviour
         bounds = new Bounds(Camera.main.transform.position, new Vector3(cameraHeight * screenAspect, cameraHeight, 0));
 
         setScale();
-        setBulletSpeed();
 
         // Set default weapon / powerup
         weapon = new SingleShot();
@@ -63,8 +62,9 @@ public class playerControl : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse1))
         {
             var tempFrames = Time.time;
+            float localBulletTime = bulletTime * (rateOfFire - (weapon.getRateOfFireAdj() + powerup.getRateOfFireAdj()));
 
-            if (lastTime + bulletTime < tempFrames)
+            if (lastTime + localBulletTime < tempFrames)
             {
                 lastTime = tempFrames;
                 shoot();
@@ -83,7 +83,8 @@ public class playerControl : MonoBehaviour
 
             Vector2 forceDirection = transform.rotation * Vector3.up;
 
-            playerRigidbody.AddForce(forceDirection * (speed * rateOfSpeed));
+            float adjSpeed = speed * (rateOfSpeed + weapon.getRateOfSpeedAdj() + powerup.getRateOfSpeedAdj());
+            playerRigidbody.AddForce(forceDirection * adjSpeed);
 
             if (Input.GetKey(KeyCode.Mouse0))
             {
@@ -96,29 +97,18 @@ public class playerControl : MonoBehaviour
             thrustTemp.enabled = false;
         }
 
-        /*
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow))
         {
-            Vector2 forceDirection = transform.rotation * Vector3.down;
-
-            playerRigidbody.AddForce(forceDirection * speed);
-        }
-        */
-
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            playerRigidbody.MoveRotation(playerRigidbody.rotation - (rotSpeed * rateOfRotation));
-
+            float adjRotSpeed = rotSpeed * (rateOfRotation + weapon.getRateOfRotationAdj() + powerup.getRateOfRotationAdj());
             mouseMode = false;
+
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                adjRotSpeed *= -1;
+            }
+
+            playerRigidbody.MoveRotation(playerRigidbody.rotation + adjRotSpeed);
         }
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            playerRigidbody.MoveRotation(playerRigidbody.rotation + (rotSpeed * rateOfRotation));
-
-            mouseMode = false;
-        }
-
 
         if (mouseMode) followMouse();
     }
@@ -174,7 +164,9 @@ public class playerControl : MonoBehaviour
         float angle = Vector2.SignedAngle(Vector2.right, direction);
         Vector3 targetRotation = new Vector3(0, 0, angle - 90);
 
-        playerRigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(targetRotation), rotSpeed));
+        float adjRotSpeed = rotSpeed * (rateOfRotation + weapon.getRateOfRotationAdj() + powerup.getRateOfRotationAdj());
+
+        playerRigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(targetRotation), adjRotSpeed));
     }
 
     void shoot()
@@ -187,7 +179,16 @@ public class playerControl : MonoBehaviour
         if (Math.Abs(transform.position.x) > bounds.extents.x)
         {
             Vector3 temp = transform.position;
-            temp.x = temp.x * -1;
+            if (temp.x > 0)
+            {
+                temp.x -= 0.2f;
+            }
+            else
+            {
+                temp.x += 0.2f;
+            }
+
+            temp.x *= -1;
 
             transform.position = temp;
         }
@@ -195,7 +196,16 @@ public class playerControl : MonoBehaviour
         if (Math.Abs(transform.position.y) > bounds.extents.y)
         {
             Vector3 temp = transform.position;
-            temp.y = temp.y * -1;
+            if (temp.y > 0)
+            {
+                temp.y -= 0.2f;
+            }
+            else
+            {
+                temp.y += 0.2f;
+            }
+
+            temp.y *= -1;
 
             transform.position = temp;
         }
@@ -210,10 +220,5 @@ public class playerControl : MonoBehaviour
     {
         float tempScale = scale * rateOfScale;
         transform.localScale = new Vector3(tempScale, tempScale, tempScale);
-    }
-
-    public void setBulletSpeed()
-    {
-        bulletTime = bulletTime * rateOfFire;
     }
 }

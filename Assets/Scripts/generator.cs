@@ -42,8 +42,8 @@ public class generator : MonoBehaviour
 
         if (asteroids.Length < maxAsteroids)
         {
-            GameObject ob = Instantiate(_asteroidPrefabs[Random.Range(0, _asteroidPrefabs.Length)], transform.position, Quaternion.identity);
-            ob.GetComponent<asteroidHandler>().killCounter = killCounter;
+            GameObject ob = Instantiate(_asteroidPrefabs[0], transform.position, Quaternion.identity);
+            ob.GetComponentInChildren<asteroidHandler>().killCounter = killCounter;
         }
 
         if (!player)
@@ -84,7 +84,7 @@ public class generator : MonoBehaviour
 
     public void updateMaxAsteroid()
     {
-        maxAsteroids += 5;
+       // maxAsteroids += 5;
     }
 
     public void setAllowReset()
