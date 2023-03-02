@@ -10,7 +10,7 @@ public partial class asteroidHandler : MonoBehaviour
 {
     public TextMeshProUGUI killCounter;
     public AsteroidTypes type = AsteroidTypes.Random;
-    public Vector2 playerPos;
+
     public enum AsteroidTypes : int
     {
         Random = 0,
@@ -24,15 +24,14 @@ public partial class asteroidHandler : MonoBehaviour
     [SerializeField] GameObject _asteroidPrefab;
 
     Rigidbody2D rbody;
-    Vector2 force;
+    Vector2 force, manualTopForce;
     Bounds bounds;
     Image healhbar;
-    float boundsGap = 8, health, maxHealth, rotationSpeed;
+    float boundsGap = 6, health, maxHealth, rotationSpeed;
 
     private bool pause = false;
     private bool gameover = false;
-
-    
+    private bool typeManuallySet = false;
 
     void Start()
     {
@@ -47,13 +46,13 @@ public partial class asteroidHandler : MonoBehaviour
         rbody = GetComponent<Rigidbody2D>();
         rbody.rotation = Random.Range(0.0f, 360.0f);
 
-        Boolean typeManuallySet = false;
 
         if (type == AsteroidTypes.Random)
         {
             // type is only ever set to random by default. If its set manually, the code setting it should work out posistion. 
             generatePoint();
             type = (AsteroidTypes) Random.Range(1, (int)Enum.GetValues(typeof(AsteroidTypes)).Cast<AsteroidTypes>().Max());
+            
             type = AsteroidTypes.Big;
         }
         else
@@ -71,67 +70,30 @@ public partial class asteroidHandler : MonoBehaviour
                 break;
 
             case AsteroidTypes.Medium:
-                tempForce = 0.8f;
+                tempForce = 0.6f;
                 tempScale = 1.5f;
                 tempHealth = 100;
                 break;
 
             case AsteroidTypes.Small:
-                tempForce = 1.4f;
+                tempForce = 1;
                 tempScale = 1;
                 tempHealth = 50;
                 break;
         }
 
-        if (typeManuallySet)
-        {
-            float forceX = Random.Range(0.2f, tempForce), forceY = Random.Range(0.2f, tempForce);
 
-            Debug.Log(playerPos.x + " " + transform.position.x);
-            Debug.Log(playerPos.y + " " + transform.position.y);
-
-
-            if (transform.position.x > 0)
-            {
-                if (playerPos.x < transform.position.x)
-                {
-                    forceX *= -1;
-                }
-            }
-            else
-            {
-                if (playerPos.x > transform.position.x)
-                {
-                    forceX *= -1;
-                }
-            }
-
-            if (transform.position.y > 0)
-            {
-                if (playerPos.y < transform.position.y)
-                {
-                    forceY *= -1;
-                }
-            }
-            else
-            {
-                if (playerPos.y > transform.position.y)
-                {
-                    forceX *= -1;
-                }
-            }
-
-
-            force = new Vector2(forceX, forceY);
-        }
-        else
+        // This asteroid was created by 
+        if (!typeManuallySet)
         {
             force = new Vector2(Random.Range(-tempForce, tempForce), Random.Range(-tempForce, tempForce));
         }
 
         rotationSpeed = Random.Range(-tempForce, tempForce);
         
-        float scale = Random.Range(tempScale, tempScale + 0.2f);
+        float scale = Random.Range(tempScale - 0.2f, tempScale + 0.2f);
+        // We don't bother to get the actual width of the asteroid so scale is used to effect it
+        boundsGap *= scale;
 
         transform.parent.localScale = new Vector3(scale, scale, scale);
 
@@ -178,6 +140,11 @@ public partial class asteroidHandler : MonoBehaviour
             }
         }
 
+        if (typeManuallySet)
+        {
+            calcManualForceChange();
+        }
+
         rbody.MovePosition(rbody.position + force);
         rbody.MoveRotation(rbody.rotation + rotationSpeed);
 
@@ -201,6 +168,50 @@ public partial class asteroidHandler : MonoBehaviour
         }
 
         return force;
+    }
+
+    private void calcManualForceChange()
+    {
+        if (force == manualTopForce) return;
+
+        // Slowly accerlate up
+        float accerlation = Random.Range(0.001f, 0.01f);
+
+        if (Math.Abs(force.x) < Math.Abs(manualTopForce.x))
+        {
+            if (manualTopForce.x > 0)
+            {
+                force.x += accerlation;
+            }
+            else
+            {
+                force.x -= accerlation;
+            }
+        }
+        else
+        {
+            force.x = manualTopForce.x;
+        }
+
+        if (Math.Abs(force.y) < Math.Abs(manualTopForce.y))
+        {
+            if (manualTopForce.y > 0)
+            {
+                force.y += accerlation;
+            }
+            else
+            {
+                force.y -= accerlation;
+            }
+        }
+        else
+        {
+            force.y = manualTopForce.y;
+        }
+
+
+        Debug.Log(force);
+
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -240,30 +251,45 @@ public partial class asteroidHandler : MonoBehaviour
                 }
                 exp.transform.localScale = new Vector3(scale, scale, scale);
 
-                Vector3 v3 = transform.parent.position / transform.parent.localScale.x;
-                Vector3 playerPos = collision.gameObject.transform.position;
-
-                if (type == AsteroidTypes.Big)
+                // Code to spawn new asteroids from its corpse
+                
+                if (type != AsteroidTypes.Small)
                 {
-                    int amt = Random.Range(2, 4);
+
+                    GameObject player = GameObject.FindGameObjectWithTag("player");
+
+                    Vector3 playerPos = player.transform.position;
+                    AsteroidTypes newType = type == AsteroidTypes.Big ? AsteroidTypes.Medium : AsteroidTypes.Small;
+
+                    Vector3 worldPlayerPoint = playerPos;
+                    Vector3 worldPoint = transform.position;
+
+                    Debug.Log(worldPlayerPoint + "     " + worldPoint);
+
+                    Vector2 newDirection = new Vector2(1, 1);
+
+                    if (worldPlayerPoint.x >= worldPoint.x)
+                    {
+                        newDirection.x *= -1;
+                    }
+
+                    if (worldPlayerPoint.y >= worldPoint.y)
+                    {
+                        newDirection.y *= -1;
+                    }
+
+                    int amt = Random.Range(1, 4);
+
+                    amt = 1;
 
                     while (amt-- > 0)
                     {
-                        GameObject test = Instantiate(_asteroidPrefab, v3, Quaternion.identity);
-                        test.GetComponentInChildren<asteroidHandler>().generateChild(AsteroidTypes.Medium, playerPos);
+                        GameObject test = Instantiate(_asteroidPrefab, rbody.position / scale, Quaternion.identity);
+
+                        test.GetComponentInChildren<asteroidHandler>().generateChild(newType, newDirection);
                     }
                 }
 
-                if (type == AsteroidTypes.Medium)
-                {
-                    int amt = Random.Range(2, 4);
-
-                    while (amt-- > 0)
-                    {
-                        GameObject test = Instantiate(_asteroidPrefab, v3, Quaternion.identity);
-                        test.GetComponentInChildren<asteroidHandler>().generateChild(AsteroidTypes.Small, playerPos);
-                    }
-                }
 
                 Destroy(transform.parent.gameObject);
             }
@@ -272,8 +298,8 @@ public partial class asteroidHandler : MonoBehaviour
 
     void generatePoint()
     {
-        float x = bounds.extents.x + boundsGap;
-        float y = bounds.extents.y + boundsGap;
+        float x = bounds.extents.x / 2 + boundsGap;
+        float y = bounds.extents.y / 2 + boundsGap;
 
         Boolean topBounds = Random.Range(0, 2) == 0;
 
@@ -288,7 +314,11 @@ public partial class asteroidHandler : MonoBehaviour
             y = Random.Range(-y, y);
         }
 
-        transform.position = new Vector2(x, y);
+        // transform.position = new Vector2(x, y);
+
+
+        transform.position = new Vector2(10, 10);
+
     }
 
     void boundsWarp()
@@ -346,9 +376,20 @@ public partial class asteroidHandler : MonoBehaviour
         this.gameover = true;
     }
 
-    public void generateChild(AsteroidTypes type, Vector3 player)
+    public void generateChild(AsteroidTypes type, Vector2 childDirection)
     {
         this.type = type;
-        this.playerPos = player;
+
+        float forceX = Random.Range(1, 1), forceY = Random.Range(1, 1);
+
+        manualTopForce = new Vector2(forceX, forceY);
+        manualTopForce = manualTopForce * childDirection;
+        
+
+        force = new Vector2(manualTopForce.x / 10, manualTopForce.y / 10);
+
+
+        Debug.Log(force + " " + manualTopForce);
+
     }
 }

@@ -295,7 +295,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -343,6 +343,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   killCounter: {fileID: 0}
   type: 0
+  playerPos: {x: 0, y: 0}
   healhbarCanvas: {fileID: 6854030289030391644}
   _explosionPrefab: {fileID: 5316616563666400664, guid: 4f12aea1a8807974e81908b52e9f1d12, type: 3}
   _asteroidPrefab: {fileID: 8702425068361166273}

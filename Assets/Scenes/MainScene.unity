@@ -734,7 +734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 490a161fb7e6ea545a8f7388d0c0d93d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAsteroids: 1
+  maxAsteroids: 10
   killCounter: {fileID: 768488831}
   deathScreen: {fileID: 424761732}
   _asteroidPrefabs:

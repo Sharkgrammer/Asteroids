@@ -23,6 +23,8 @@ public class generator : MonoBehaviour
 
         InvokeRepeating("updateMaxAsteroid", 20.0f, 10.0f);
         InvokeRepeating("generateRandomPickup", 10.0f, 20.0f);
+
+        maxAsteroids = 1;
     }
 
 
@@ -95,5 +97,10 @@ public class generator : MonoBehaviour
     public void generateRandomPickup()
     {
        Instantiate(this.pickup, transform.position, Quaternion.identity);
+    }
+
+    public Vector2 getPlayerPosistion()
+    {
+        return player.transform.position;
     }
 }
